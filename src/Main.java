@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -26,6 +27,9 @@ public class Main {
             return false;
         }
 
+        // Lê todo o conteúdo do arquivo como uma string
+        String fileContent = Files.readString(Path.of(filePath), StandardCharsets.UTF_8);
+
         // Lê todo o conteúdo do arquivo
         byte[] fileBytes = Files.readAllBytes(Path.of(filePath));
 
@@ -37,11 +41,25 @@ public class Main {
 
         // Verifica se arquivo começa com o número '0'
         if (fileBytes[0] != '0') {
-            System.out.println("O primeiro caractere do arquivo não é '0'.");
+            System.out.println("POSIÇÃO 01: O caractere precisar ser '0'.");
             return false;
             }
+
+        // Verifica se o segundo caractere do arquivo é '1'
+        if (fileBytes[1] != '1') {
+            System.out.println("POSIÇÃO 02: O caractere precisar ser '1'.");
+            return false;
+        }
+
+        // Verifica se da posição 3 a 9 está escrito 'REMESSA'
+        String substring = fileContent.substring(2, 9);
+        if (!substring.equals("REMESSA")) {
+            System.out.println("POSIÇÃO 03 a 09: Os caracteres da não formam 'REMESSA'.");
+            return false;
+        }
 
         // Se chegou até aqui, o arquivo é considerado válido
         return true;
     }
+
 }
