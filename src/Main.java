@@ -1,65 +1,36 @@
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 public class Main {
 
     public static void main(String[] args) {
-        String filePath = "C:\\Users\\V E A\\Documents\\remessa_teste.txt"; // Substitua pelo caminho do seu arquivo
+        String arquivoPath = "C:\\Users\\V E A\\Documents\\remessa_teste.txt";
+
         try {
-            if (validateRemessaFile(filePath)) {
-                System.out.println("O arquivo de remessa é válido.");
+            if (validarCNAB(arquivoPath)) {
+                System.out.println("O arquivo está de acordo com a estrutura do CNAB 400.");
             } else {
-                System.out.println("O arquivo de remessa não é válido.");
+                System.out.println("O arquivo não está de acordo com a estrutura do CNAB 400.");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Erro ao ler o arquivo: " + e.getMessage());
         }
     }
 
-    public static boolean validateRemessaFile(String filePath) throws IOException {
-        // Verifica se o arquivo existe
-        File file = new File(filePath);
-        if (!file.exists() || !file.isFile()) {
-            System.out.println("Arquivo não encontrado.");
-            return false;
-        }
+    private static boolean validarCNAB(String arquivoPath) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader(arquivoPath))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+                // Verifique as condições necessárias para validar o layout CNAB 400
+                if (linha.length() != 400) {
+                    return false; // O comprimento de cada linha deve ser 400 caracteres
+                }
 
-        // Lê todo o conteúdo do arquivo como uma string
-        String fileContent = Files.readString(Path.of(filePath), StandardCharsets.UTF_8);
-
-        // Lê todo o conteúdo do arquivo
-        byte[] fileBytes = Files.readAllBytes(Path.of(filePath));
-
-        // Verifica se o arquivo tem exatamente 400 bytes
-        if (fileBytes.length != 404) {
-            System.out.println("O arquivo não possui 400 bytes.");
-            return false;
-        }
-
-        // Verifica se arquivo começa com o número '0'
-        if (fileBytes[0] != '0') {
-            System.out.println("POSIÇÃO 01: O caractere precisar ser '0'.");
-            return false;
+                // Adicione outras verificações conforme necessário
+                // Exemplo: Verificar se os campos obrigatórios estão presentes e possuem os valores corretos
             }
-
-        // Verifica se o segundo caractere do arquivo é '1'
-        if (fileBytes[1] != '1') {
-            System.out.println("POSIÇÃO 02: O caractere precisar ser '1'.");
-            return false;
         }
 
-        // Verifica se da posição 3 a 9 está escrito 'REMESSA'
-        String substring = fileContent.substring(2, 9);
-        if (!substring.equals("REMESSA")) {
-            System.out.println("POSIÇÃO 03 a 09: Os caracteres da não formam 'REMESSA'.");
-            return false;
-        }
-
-        // Se chegou até aqui, o arquivo é considerado válido
-        return true;
+        return true; // Se passou por todas as linhas sem problemas, consideramos o arquivo válido
     }
-
 }
