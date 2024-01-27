@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 public class Main {
 
     public static void main(String[] args) {
-        String filePath = "C:\\Users\\V E A\\Documents\\remessa_teste.txt"; // Substitua pelo caminho do seu arquivo
+        String filePath = "C:\\Users\\V E A\\Documents\\remessa_teste.txt"; // caminho do arquivo
         try {
             if (validateRemessaFile(filePath)) {
                 System.out.println("O arquivo de remessa é válido.");
@@ -59,6 +59,34 @@ public class Main {
         String substringNumber = fileContent.substring(9, 11);
         if (!substringNumber.equals("01")) {
             System.out.println("Os caracteres da posição 10 a 11 não formam '01'.");
+            return false;
+        }
+
+        // Verifica se da posição 12 a 26 está escrito 'COBRANCA'
+        String substring2 = fileContent.substring(11, 19);
+        if (!substring2.equals("COBRANCA")) {
+            System.out.println("Os caracteres da posição 11 a 19 não formam 'COBRANCA'.");
+            return false;
+        }
+
+        // Verifica se da posição 31 a 32 está presente '00'
+        String substringNumber2 = fileContent.substring(30, 32);
+        if (!substringNumber2.equals("00")) {
+            System.out.println("Os caracteres da posição 31 a 32 não formam '00'.");
+            return false;
+        }
+
+        // Verifica o código do banco '341' nas posições 77 a 79
+        String substringNumber3 = fileContent.substring(76, 79);
+        if (!substringNumber3.equals("341")) {
+            System.out.println("Os caracteres da posição 77 a 79 não formam o código do banco '341'.");
+            return false;
+        }
+
+        // Verifica nome do banco por extenso 'BANCO ITAU SA '
+        String substring3 = fileContent.substring(79, 94);
+        if (!substring3.equals("BANCO ITAU SA  ")) {
+            System.out.println("Os caracteres da posição 80 a 94 não formam o nome do banco 'BANCO ITAU SA  '.");
             return false;
         }
 
