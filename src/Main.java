@@ -90,6 +90,13 @@ public class Main {
             return false;
         }
 
+        // Verifica caractere sequencial remessa. Não pode ser '00000'
+        String stringNumber4 = fileContent.substring(394, 400);
+        if (stringNumber4.equals("000000")) {
+            System.out.println("O número sequencial remessa não pode ser '000000' utilizar da posição 395 a 400 para preenchimento do número.");
+            return false;
+        }
+
         // Se chegou até aqui, o arquivo é considerado válido
         return true;
     }
